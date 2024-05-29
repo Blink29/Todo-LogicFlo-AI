@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Checkbox, FormControlLabel, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useTodoContext } from "../context/TodoContext";
 import EditTodo from "./EditTodo";
 
-const TodoItem = ({ todo }) => {
+interface Todo {
+    key: string;
+    title: string;
+    description: string;
+    completed: boolean;
+  }
+  
+  interface TodoItemProps {
+    todo: Todo;
+  }
+
+const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
   const { deleteTodo, updateTodo } = useTodoContext();
   const [editOpen, setEditOpen] = useState(false);
 
