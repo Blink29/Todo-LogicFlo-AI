@@ -24,6 +24,17 @@ const AddTodo = (props: Props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const handleAddTodo = () => {
+    const newTodo = {title, description};
+    const todos = JSON.parse(localStorage.getItem("todos") || "[]");
+    todos.push(newTodo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+    setTitle("");
+    setDescription("");
+    handleClose();
+    window.dispatchEvent(new Event("storage")); //event listeners for changes in local storage
+  }
+
   return (
     <div>
       <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpen}>
@@ -56,7 +67,7 @@ const AddTodo = (props: Props) => {
                     placeholder="Enter todo description"
                     onChange={(e) => setDescription(e.target.value)}
                 />
-                <Button variant="contained" className="w-full">
+                <Button variant="contained" className="w-full" onClick={handleAddTodo}>
                     Add Todo
                 </Button>
             </Box>
