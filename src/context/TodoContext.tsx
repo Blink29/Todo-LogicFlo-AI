@@ -12,12 +12,22 @@ type TodoContextType = {
   addTodo: (todo: Todo) => void;
   deleteTodo: (key: string) => void;
   updateTodo: (key: string, updatedTodo: Todo) => void;
+  fetchTodos: () => void;
 };
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
 
 const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    fetchTodos(); 
+  }, []);
+
+  const fetchTodos = () => {
+    const storedTodos = JSON.parse(localStorage.getItem("todos") || "[]");
+    setTodos(storedTodos);
+  };
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem("todos") || "[]");
@@ -43,7 +53,7 @@ const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   };
 
   return (
-    <TodoContext.Provider value={{ todos, addTodo, deleteTodo, updateTodo }}>
+    <TodoContext.Provider value={{ todos, addTodo, deleteTodo, updateTodo, fetchTodos }}>
       {children}
     </TodoContext.Provider>
   );

@@ -1,29 +1,52 @@
-import { Card, CardContent, IconButton, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Checkbox, FormControlLabel, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
+import { useTodoContext } from "../context/TodoContext";
+import EditTodo from "./EditTodo";
 
-type TodoItemProps = {
-  title: string;
-  description: string;
-};
+const TodoItem = ({ todo }) => {
+  const { deleteTodo, updateTodo } = useTodoContext();
+  const [editOpen, setEditOpen] = useState(false);
 
-const TodoItem = ({ title, description }: TodoItemProps) => {
-    const [edit, setEdit] = useState(false);
+  const handleDelete = () => {
+    deleteTodo(todo.key);
+  };
+
+  const handleEditOpen = () => {
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEditOpen(false);
+  };
+
+  const handleCheckboxChange = () => {
+    const updatedTodo = { ...todo, completed: !todo.completed };
+    updateTodo(todo.key, updatedTodo);
+  };
 
   return (
-    <Card sx={{ mb: 2 }}>
-      <CardContent>
-        <Typography variant="h5">{title}</Typography>
-        <Typography variant="body2">{description}</Typography>
-        <IconButton aria-label="edit" onClick={() => setEdit(true)}>
-            <EditIcon />
-        </IconButton>
-        <IconButton aria-label="delete" >
-            <DeleteIcon />
-        </IconButton>
-      </CardContent>
-    </Card>
+    <div>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={todo.completed}
+            onChange={handleCheckboxChange}
+            color="primary"
+          />
+        }
+        label={todo.completed ? <del>{todo.title}</del> : todo.title}
+      />
+      <div>{todo.description}</div>
+      <IconButton onClick={handleEditOpen}>
+        <EditIcon />
+      </IconButton>
+      <IconButton onClick={handleDelete}>
+        <DeleteIcon />
+      </IconButton>
+      <EditTodo open={editOpen} onClose={handleEditClose} todo={todo} />
+    </div>
   );
 };
 

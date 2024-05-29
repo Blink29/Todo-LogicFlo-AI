@@ -1,32 +1,17 @@
-import { useEffect, useState } from "react";
+import {useEffect} from "react";
 import TodoItem from "./TodoItem";
+import { useTodoContext } from "../context/TodoContext";
 
 const TodoList = () => {
-  const [todos, setTodos] = useState<{ title: string; description: string }[]>([]);
-
-  const fetchTodos = () => {
-    const todos = JSON.parse(localStorage.getItem("todos") || "[]");
-    setTodos(todos);
-  };
+  const { todos, fetchTodos } = useTodoContext(); 
 
   useEffect(() => {
     fetchTodos();
-
-    const handleStorageChange = () => {
-      fetchTodos();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
+  }, []); 
   return (
     <div>
-      {todos.map((todo, index) => (
-        <TodoItem key={index} title={todo.title} description={todo.description} />
+      {todos.map((todo) => (
+        <TodoItem key={todo.key} todo={todo} />
       ))}
     </div>
   );

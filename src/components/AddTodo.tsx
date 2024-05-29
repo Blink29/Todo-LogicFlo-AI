@@ -1,8 +1,7 @@
 import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
-
-type Props = {};
+import { useTodoContext } from "../context/TodoContext";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,7 +15,8 @@ const style = {
   p: 4,
 };
 
-const AddTodo = (props: Props) => {
+const AddTodo = () => {
+  const {addTodo} = useTodoContext();
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
@@ -32,13 +32,10 @@ const AddTodo = (props: Props) => {
       description,
       completed: false
     };
-    const todos = JSON.parse(localStorage.getItem("todos") || "[]");
-    todos.push(newTodo);
-    localStorage.setItem("todos", JSON.stringify(todos));
+    addTodo(newTodo);
     setTitle("");
     setDescription("");
     handleClose();
-    window.dispatchEvent(new Event("storage")); //event listeners for changes in local storage
   }
 
   return (
