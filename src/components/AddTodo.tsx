@@ -25,7 +25,13 @@ const AddTodo = (props: Props) => {
   const handleClose = () => setOpen(false);
 
   const handleAddTodo = () => {
-    const newTodo = {title, description};
+    const key = Date.now().toString();
+    const newTodo = {
+      key,
+      title, 
+      description,
+      completed: false
+    };
     const todos = JSON.parse(localStorage.getItem("todos") || "[]");
     todos.push(newTodo);
     localStorage.setItem("todos", JSON.stringify(todos));
